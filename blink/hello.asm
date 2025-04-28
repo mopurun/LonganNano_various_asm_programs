@@ -1,4 +1,8 @@
-
+.equ GPIOA_BASE , 0x40010800
+.equ GPIOC_BASE , 0x40011000
+.equ GPIOx_CTL0 , 0x00
+.equ GPIOx_CTL1 , 0x04
+.equ GPIOx_OCTL , 0x0C
 main:
 	LUI sp,0x20000
 	ADDI sp,sp,0x700
@@ -9,44 +13,63 @@ main:
 	LUI t0,0x40021
 	ADDI t0,t0,0x018
 	LUI t1,0x00000
-	ADDI t1,t1,0x4
+	ADDI t1,t1,0x14
 	SW t1,0x0(t0)
 
-	# GPIOA_CTL0 p111
-	#LUI t0,0x40010
-	#ADDI t0,t0,-2048 #0x800
-	LI t0,0x40010800
-	LUI t1,0x00000
-	ADDI t1,t1,0x220
-	SW t1,0x0(t0)
+	LI t0,GPIOA_BASE
+	LI t1,0x220
+	SW t1,GPIOx_CTL0(t0)
+
+	LI t0,GPIOC_BASE
+	LI t1,0x00200000
+	SW t1,GPIOx_CTL1(t0)
 	AND  t1,t1,x0
 
 	#reset register
 	AND  s1,s1,x0
 
 	LOOPS:
+
+
+	#GREEN
 	ADDI s1,s1,0x01
-	# GPIOA_OCTL
-	#LUI t0,0x40010
-	#ADDI t0,t0,-2036 #0x80C
-	LI t0,0x4001080C
+	LI t0,GPIOA_BASE
 	LUI t1,0x00000
 	ADDI t1,t1,0x4
-	SW  t1,0(t0)
+	SW  t1,GPIOx_OCTL(t0)
+	LI t0,GPIOC_BASE
+	LI t1,0x2000
+	SW  t1,GPIOx_OCTL(t0)
 	AND  t0,t0,x0
 	AND  t1,t1,x0
 
 
 	JAL x1,TIMER
 
+
+	#BLUE
 	ADDI s1,s1,0x01
-	#GPIOA_OCTL
-	#LUI t0,0x40010
-	#ADDI t0,t0,-2036 #0x80C
-	LI t0,0x4001080C
+	LI t0,GPIOA_BASE
 	LUI t1,0x00000
 	ADDI t1,t1,0x2
-	SW  t1,0(t0)
+	SW  t1,GPIOx_OCTL(t0)
+	LI t0,GPIOC_BASE
+	LI t1,0x2000
+	SW  t1,GPIOx_OCTL(t0)	
+	AND  t0,t0,x0
+	AND  t1,t1,x0
+
+	JAL x1,TIMER
+
+	#RED
+	ADDI s1,s1,0x01
+	LI t0,GPIOA_BASE
+	LUI t1,0x00000
+	ADDI t1,t1,0x6
+	SW  t1,GPIOx_OCTL(t0)
+	LI t0,GPIOC_BASE
+	LI t1,0x000
+	SW  t1,GPIOx_OCTL(t0)	
 	AND  t0,t0,x0
 	AND  t1,t1,x0
 
