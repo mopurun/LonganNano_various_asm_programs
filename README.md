@@ -1,5 +1,7 @@
 # LonganNano_various_asm_programs
 
+![img1](blink/img1.jpg)
+
 Sipeed Longan Nano RISC-V GD32VF103CBT6開発ボードをアセンブリ言語で動かしてみました。
 
 - BOOT0スイッチを押しながらUSBケーブル繋いで電源投入
