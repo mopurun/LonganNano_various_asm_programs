@@ -1,0 +1,73 @@
+
+main:
+	LUI sp,0x20000
+	ADDI sp,sp,0x700
+	LUI gp,0x20000
+	ADDI gp,gp,0x500
+
+	#RCU_APB2EN=0x40021018 p82
+	LUI t0,0x40021
+	ADDI t0,t0,0x018
+	LUI t1,0x00000
+	ADDI t1,t1,0x4
+	SW t1,0x0(t0)
+
+	# GPIOA_CTL0 p111
+	#LUI t0,0x40010
+	#ADDI t0,t0,-2048 #0x800
+	LI t0,0x40010800
+	LUI t1,0x00000
+	ADDI t1,t1,0x220
+	SW t1,0x0(t0)
+	AND  t1,t1,x0
+
+	#reset register
+	AND  s1,s1,x0
+
+	LOOPS:
+	ADDI s1,s1,0x01
+	# GPIOA_OCTL
+	#LUI t0,0x40010
+	#ADDI t0,t0,-2036 #0x80C
+	LI t0,0x4001080C
+	LUI t1,0x00000
+	ADDI t1,t1,0x4
+	SW  t1,0(t0)
+	AND  t0,t0,x0
+	AND  t1,t1,x0
+
+
+	JAL x1,TIMER
+
+	ADDI s1,s1,0x01
+	#GPIOA_OCTL
+	#LUI t0,0x40010
+	#ADDI t0,t0,-2036 #0x80C
+	LI t0,0x4001080C
+	LUI t1,0x00000
+	ADDI t1,t1,0x2
+	SW  t1,0(t0)
+	AND  t0,t0,x0
+	AND  t1,t1,x0
+
+	JAL x1,TIMER
+
+	#goto main loop
+	JAL x1,LOOPS
+
+
+	TIMER:
+	ADDI sp,sp,-8
+	SW ra,4(sp)
+	AND  s1,s1,x0
+	OR  s1,s1,1	
+	LUI t2,0x00100
+	ADDI t2,t2,0x700
+	LOOP3:
+	SUB t2,t2,s1
+	BNEZ t2,LOOP3
+	AND  s1,s1,x0
+	LW ra,4(sp)
+	ADDI sp,sp,8
+	RET
+
