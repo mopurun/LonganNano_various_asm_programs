@@ -32,7 +32,6 @@ main:
 
 
 	#GREEN
-	ADDI s1,s1,0x01
 	LI t0,GPIOA_BASE
 	LUI t1,0x00000
 	ADDI t1,t1,0x4
@@ -48,7 +47,6 @@ main:
 
 
 	#BLUE
-	ADDI s1,s1,0x01
 	LI t0,GPIOA_BASE
 	LUI t1,0x00000
 	ADDI t1,t1,0x2
@@ -62,7 +60,6 @@ main:
 	JAL x1,TIMER
 
 	#RED
-	ADDI s1,s1,0x01
 	LI t0,GPIOA_BASE
 	LUI t1,0x00000
 	ADDI t1,t1,0x6
